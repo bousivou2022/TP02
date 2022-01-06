@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>uploadImg</title>
+   
+</head>
+<body>
+    <style>
+        body {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+        }
+        .wrapper{
+            padding: 10px;
+            background-color: rgb(156, 151, 151);
+        }
+       .wrapper canvas{
+        background-color: white;
+      border: 1px solid black;
+       }
+        </style>
+
+<div class="wrapper">
+    <canvas id="imageCanvas" width="500" height="500" >
+        Your browser does not support the HTML canvas tag. ></canvas>
+        <br>
+        <span>Canvas👻 :Insert me an image please!</span>
+        <br>
+        <input type="file" id="imageLoader" name="imageLoader"/> 
+</div>
+</div>
+<script> 
+ var imageLoader = document.getElementById('imageLoader');
+ imageLoader.addEventListener('change', handleImage, false);
+var canvas = document.getElementById('imageCanvas');
+var ctx = canvas.getContext('2d');
+function handleImage(e){
+    var reader = new FileReader();
+    reader.onload = function(event){
+        var img = new Image();
+        img.onload = function(){
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img,0,0);
+        }
+        img.src = event.target.result;
+    }
+    reader.readAsDataURL(e.target.files[0]);      
+}
+    </script> 
+</body>
+</html>

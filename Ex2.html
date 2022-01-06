@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>video</title>
+    <style>
+         body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+        .wrapper {
+            background-color: rgb(143, 141, 141);
+            padding: 10px;
+        }
+        .wrapper canvas {
+            background-color: white;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <canvas id="viewport" width="640" height="480"></canvas>
+        <br>
+        <span>Canvas👻 : Please show your face on me </span>
+        <br>
+        <button id="play-btn" onclick="onOpenWebcame()">Pause</button>
+    </div>
+    <script >
+      const canvas = document.querySelector('canvas');
+var video = document.createElement('video');
+video.autoplay = true;
+video.playsInline = true;
+let playing = false;
+
+function onOpenWebcame() {
+    playing = !playing;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    (function loop() {
+        if(playing){
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            setTimeout(loop, 1000 / 30); //drawing at 30fps
+        }
+    })();
+    document.querySelector('#play-btn').innerHTML = playing ? 'Pause' : 'Play';
+}
+function handleSuccess(stream) {
+    video.srcObject = stream;
+}
+function handleError(error) {
+    console.log('navigator.MediaDevices.getUserMedia error: ', error.message, error.name);
+}
+navigator.mediaDevices.getUserMedia({
+    audio: false,
+    video: true
+}).then(handleSuccess).catch(handleError);
+    </script>
+</body>
+</html>

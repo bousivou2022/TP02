@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Hello </title>
+<style>
+    body {
+       display: flex;
+       justify-content: left;
+       align-items: center;
+       text-align: center;
+       color: white;
+   }
+   .inputoutput {
+       background-color: rgb(143, 141, 141);
+       padding: 10px;
+   }
+   .outPut {
+      
+       padding: 10px;
+   }
+   .inputoutput canvas {
+       background-color: white;
+       border: 1px solid black;
+   }
+   .outPut canvas {
+       background-color: white;
+       border: 1px solid black;
+   }
+   
+</style>
+</head>
+<body>
+<div class="inputoutput">
+   
+        <canvas id="canvasInput" width="640" height="480"></canvas>
+        <br>
+        <span>Canvas👻 : Please show your face on me </span>
+        <br>
+        <button id="play-btn" onclick="onOpenWebcame()">Pause</button>
+       
+</div>
+<div class="outPut">
+            <canvas id="canvasOutput">
+ </div>
+<script type="text/javascript">
+const canvas = document.querySelector('canvas');
+var video = document.createElement('video');
+video.autoplay = true;
+video.playsInline = true;
+let playing = false;
+
+function onOpenWebcame() {
+    playing = !playing;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    (function loop() {
+        if(playing){
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            setTimeout(loop, 1000 / 30); //drawing at 30fps
+        }
+    })();
+    document.querySelector('#play-btn').innerHTML = playing ? 'Pause' : 'Play';
+}
+function handleSuccess(stream) {
+    video.srcObject = stream;
+}
+function handleError(error) {
+    console.log('navigator.MediaDevices.getUserMedia error: ', error.message, error.name);
+}
+navigator.mediaDevices.getUserMedia({
+    audio: false,
+    video: true
+}).then(handleSuccess).catch(handleError);
+let src = cv.imread('canvasInput');
+let dst = new cv.Mat();
+let rect = new cv.Rect(100,100,200,200);
+dst = src.roi(rect);
+cv.imshow('canvasOutput', dst);
+
+function onOpenCvReady() {
+  document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
+}
+</script>
+<script async src="opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+</body>
+</html>
